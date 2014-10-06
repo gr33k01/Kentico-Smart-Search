@@ -16,8 +16,8 @@ var kenticoSmartSearch = {
 
         $(kenticoSmartSearch.config.inputSelector).on('keydown', function(e) {
             if (e.keyCode == 13) {
-                kenticoSmartSearch.search();
                 e.preventDefault();
+                kenticoSmartSearch.search();
             }
         });
 
@@ -26,22 +26,17 @@ var kenticoSmartSearch = {
 
     search: function() {
 
-        var keywords = $(kenticoSmartSearch.config.inputSelector).val();
+        var keywords = $(kenticoSmartSearch.config.inputSelector).val(),
+            url = kenticoSmartSearch.config.searchUrl,
+            queryString = '?searchtext=' + encodeURI(keywords) + '&searchmode=' + kenticoSmartSearch.config.searchMode;
+        
+        if (!keywords) return;
 
-        if (keywords == '') return false;
-
-        var url = kenticoSmartSearch.config.searchUrl;
-        var queryString = '?searchtext=' + encodeURI(keywords) + '&searchmode=' + kenticoSmartSearch.config.searchMode;
-
-        switch (kenticoSmartSearch.config.newWindow) {
-
-            case true:
-                window.open(url + queryString, '_blank');
-                break;
-
-            case false:
-                window.location.href = url + queryString;
-                break;
+        if(kenticoSmartSearch.config.newWindow){
+            window.open(url + queryString, '_blank');
+            return;
         }
+
+        window.location.href = url + queryString;
     }
 }
